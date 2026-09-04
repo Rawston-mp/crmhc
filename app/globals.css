@@ -1,0 +1,578 @@
+/* Tokens da identidade visual — ver design.md.
+   Toda cor e todo canto arredondado do projeto sai daqui. */
+:root {
+  --fundo: #FAFAF7;
+  --superficie: #FFFFFF;
+  --borda: #E6E4DE;
+  --texto: #17181C;
+  --texto-apoio: #6B6E76;
+
+  --destaque: #1D4ED8;
+  --destaque-hover: #1E40AF;
+
+  --etapa-novo: #64748B;
+  --etapa-em-contato: #D97706;
+  --etapa-proposta: #7C3AED;
+  --etapa-cliente: #15803D;
+
+  --raio: 10px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--fundo);
+  color: var(--texto);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--destaque);
+}
+
+a:hover {
+  color: var(--destaque-hover);
+}
+
+/* --- Estrutura da página --- */
+
+.cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borda);
+  padding: 22px 32px;
+}
+
+.marca {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.conteudo {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 56px 32px;
+}
+
+.cartao {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 32px;
+}
+
+.cartao h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.cartao p {
+  color: var(--texto-apoio);
+  max-width: 60ch;
+}
+
+/* --- Formulário --- */
+
+.formulario {
+  margin-top: 24px;
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 720px) {
+  .campos {
+    grid-template-columns: 1fr;
+  }
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo span {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto-apoio);
+}
+
+.campo input {
+  font: inherit;
+  font-size: 16px;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 12px 14px;
+  outline: none;
+}
+
+.campo input::placeholder {
+  color: var(--texto-apoio);
+  opacity: 0.6;
+}
+
+.campo input:focus {
+  border-color: var(--destaque);
+}
+
+.erro {
+  margin-top: 18px;
+  font-weight: 500;
+  color: var(--texto);
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-left: 3px solid var(--destaque);
+  border-radius: var(--raio);
+  padding: 12px 14px;
+}
+
+.botao {
+  font: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--superficie);
+  background: var(--destaque);
+  border: none;
+  border-radius: var(--raio);
+  padding: 13px 22px;
+  margin-top: 24px;
+  cursor: pointer;
+}
+
+.botao:hover {
+  background: var(--destaque-hover);
+}
+
+.botao:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* --- Lista de contatos --- */
+
+.bloco-lista {
+  margin-top: 56px;
+}
+
+.titulo-lista {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.vazio {
+  color: var(--texto-apoio);
+}
+
+.lista {
+  list-style: none;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+
+.item {
+  border-bottom: 1px solid var(--borda);
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 20px 24px;
+  font: inherit;
+  text-align: left;
+  color: var(--texto);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.linha:hover {
+  background: var(--fundo);
+}
+
+.fim-da-linha {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.seta {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--destaque);
+  white-space: nowrap;
+}
+
+.dados {
+  display: grid;
+  grid-template-columns: 1.2fr 1.4fr 1fr;
+  gap: 24px;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .dados {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+.nome {
+  font-weight: 700;
+}
+
+.apoio {
+  color: var(--texto-apoio);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Etiqueta de etapa: único lugar onde as cores de etapa aparecem (design.md). */
+.etiqueta {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--superficie);
+  border-radius: var(--raio);
+  padding: 5px 12px;
+  white-space: nowrap;
+}
+
+.etapa-novo { background: var(--etapa-novo); }
+.etapa-em-contato { background: var(--etapa-em-contato); }
+.etapa-proposta { background: var(--etapa-proposta); }
+.etapa-cliente { background: var(--etapa-cliente); }
+
+
+/* --- Anotações de um contato --- */
+
+.anotacoes {
+  padding: 4px 24px 28px;
+  border-top: 1px solid var(--borda);
+  padding-top: 24px;
+}
+
+.anotacoes textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 12px 14px;
+  outline: none;
+  resize: vertical;
+}
+
+.anotacoes textarea::placeholder {
+  color: var(--texto-apoio);
+  opacity: 0.6;
+}
+
+.anotacoes textarea:focus {
+  border-color: var(--destaque);
+}
+
+.botao-menor {
+  margin-top: 16px;
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+.historico {
+  list-style: none;
+  margin-top: 28px;
+}
+
+.anotacao {
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid var(--borda);
+}
+
+.anotacao:first-child {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
+}
+
+.data {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--texto-apoio);
+  margin-bottom: 6px;
+}
+
+.texto-anotacao {
+  white-space: pre-wrap;
+}
+
+/* Botões de ação dentro de uma anotação */
+
+.acoes-da-anotacao {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 12px;
+}
+
+.link-acao {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--destaque);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.link-acao:hover {
+  color: var(--destaque-hover);
+  text-decoration: underline;
+}
+
+.link-acao:disabled {
+  opacity: 0.6;
+  cursor: default;
+  text-decoration: none;
+}
+
+/* "Excluir" não ganha cor própria: design.md permite uma cor de destaque só.
+   O peso do aviso vem do texto de confirmação, não de um vermelho. */
+.link-acao.perigo {
+  color: var(--texto-apoio);
+}
+
+.link-acao.perigo:hover {
+  color: var(--texto);
+}
+
+.aviso {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto);
+}
+
+.anotacao .acoes-da-anotacao .botao {
+  margin-top: 0;
+}
+
+/* --- Tela de login --- */
+
+.tela-de-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 32px;
+}
+
+.caixa-de-login {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+}
+
+.caixa-de-login .marca {
+  margin-bottom: 6px;
+}
+
+.caixa-de-login .apoio {
+  color: var(--texto-apoio);
+  margin-bottom: 32px;
+}
+
+.campo-espacado {
+  margin-top: 20px;
+}
+
+.botao-largo {
+  width: 100%;
+}
+
+/* --- Barra de navegação --- */
+
+.cabecalho .lado-esquerdo,
+.cabecalho .lado-direito {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.menu {
+  display: flex;
+  gap: 24px;
+}
+
+.menu a {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  text-decoration: underline;
+}
+
+.quem-sou {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.selo-admin {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--superficie);
+  background: var(--texto-apoio);
+  border-radius: var(--raio);
+  padding: 3px 9px;
+}
+
+@media (max-width: 720px) {
+  .cabecalho {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .cabecalho .lado-esquerdo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* --- Área de usuários --- */
+
+.linha-usuario {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px 24px;
+}
+
+.dados-usuario {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dados-usuario .apoio {
+  font-size: 14px;
+}
+
+/* --- Rodapé dos cartões de login e cadastro --- */
+
+.rodape-do-cartao {
+  margin-top: 24px;
+  font-size: 15px;
+  color: var(--texto-apoio);
+}
+
+.aviso-bom {
+  margin-top: 8px;
+  color: var(--texto);
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-left: 3px solid var(--destaque);
+  border-radius: var(--raio);
+  padding: 14px 16px;
+}
+
+/* --- Follow-up escrito pela IA --- */
+
+.follow-up {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--borda);
+}
+
+.follow-up .botao {
+  margin-top: 0;
+}
+
+.mensagem-gerada {
+  margin-top: 20px;
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-left: 3px solid var(--destaque);
+  border-radius: var(--raio);
+  padding: 18px 20px;
+}
+
+/* --- Painel do funil --- */
+
+.painel {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 860px) {
+  .painel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.quadro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 24px;
+}
+
+/* O total ganha destaque pela borda, não por cor: o design.md reserva a cor
+   de destaque para ações, e as cores de etapa só para as etiquetas. */
+.quadro-total {
+  border-color: var(--texto);
+}
+
+.numero {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.rotulo {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto-apoio);
+}

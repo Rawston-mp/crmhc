@@ -1,0 +1,7 @@
+node_modules
+.next
+
+# Segredos. O "*" cobre variações como .env.local.bak e .env.production.local,
+# que ficariam de fora se a lista fosse só com os nomes exatos.
+.env
+.env*

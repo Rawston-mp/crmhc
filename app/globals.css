@@ -1,21 +1,27 @@
-/* Tokens da identidade visual — ver design.md.
-   Toda cor e todo canto arredondado do projeto sai daqui. */
+/* Tokens da identidade visual v2 — ver design.md.
+   Toda cor, fonte e canto arredondado do projeto sai daqui. */
 :root {
-  --fundo: #FAFAF7;
-  --superficie: #FFFFFF;
-  --borda: #E6E4DE;
-  --texto: #17181C;
-  --texto-apoio: #6B6E76;
+  --fundo: #0D1117;
+  --superficie: #151B24;
+  --superficie-alta: #1B222E;
+  --borda: #262F3D;
+  --texto: #E6EAF2;
+  --texto-apoio: #94A0B8;
 
-  --destaque: #1D4ED8;
-  --destaque-hover: #1E40AF;
+  --destaque: #4D8DFF;
+  --destaque-hover: #6BA1FF;
 
-  --etapa-novo: #64748B;
-  --etapa-em-contato: #D97706;
-  --etapa-proposta: #7C3AED;
-  --etapa-cliente: #15803D;
+  --etapa-novo: #8B99AD;
+  --etapa-em-contato: #F5A524;
+  --etapa-proposta: #A78BFA;
+  --etapa-cliente: #34D399;
+
+  --erro: #F87171;
 
   --raio: 10px;
+
+  /* Fonte dos números e etiquetas técnicas. O valor vem do layout.js. */
+  --mono: var(--fonte-mono), ui-monospace, monospace;
 }
 
 * {
@@ -40,28 +46,177 @@ a:hover {
   color: var(--destaque-hover);
 }
 
-/* --- Estrutura da página --- */
+/* --- Shell de aplicação: cabeçalho em cima, navegação à esquerda --- */
+
+.app {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
 
 .cabecalho {
+  grid-column: 1 / -1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   background: var(--superficie);
   border-bottom: 1px solid var(--borda);
-  padding: 22px 32px;
+  padding: 18px 32px;
 }
 
 .marca {
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.lado-direito {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.quem-sou {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto-apoio);
+}
+
+.selo-admin {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--destaque);
+  border: 1px solid var(--destaque);
+  border-radius: var(--raio);
+  padding: 1px 8px;
+}
+
+/* Navegação lateral: a barra desce a tela inteira. */
+.lateral {
+  grid-column: 1;
+  background: var(--superficie);
+  border-right: 1px solid var(--borda);
+  padding: 24px 16px;
+}
+
+/* Quem gruda é a lista, não a barra: assim a barra continua alta até embaixo
+   e os itens seguem visíveis enquanto o conteúdo rola. */
+.menu {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu a {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--texto-apoio);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  border-radius: var(--raio);
+  padding: 10px 14px;
+}
+
+.menu a:hover {
+  color: var(--texto);
+  background: var(--superficie-alta);
+}
+
+/* Item ativo: a única cor de destaque do design.md. */
+.menu a.ativo {
+  color: var(--destaque);
+  background: var(--superficie-alta);
+  border-left-color: var(--destaque);
+  font-weight: 700;
 }
 
 .conteudo {
+  grid-column: 2;
   max-width: 940px;
-  margin: 0 auto;
-  padding: 56px 32px;
+  padding: 48px 40px 80px;
+}
+
+/* O Kanban usa a largura toda: com o limite de leitura de 940px as quatro
+   colunas ficariam espremidas sem motivo. */
+.conteudo-largo {
+  max-width: none;
+}
+
+/* Telas estreitas: a navegação sai da lateral e vira uma faixa horizontal
+   logo abaixo do cabeçalho. Sem gaveta, sem botão de menu. */
+@media (max-width: 860px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  /* O nome do CRM, quem está logado e o Sair não cabem lado a lado num
+     celular: em vez de empurrarem a página para o lado, quebram em duas
+     linhas. */
+  .cabecalho {
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    padding: 14px 20px;
+  }
+
+  .lado-direito {
+    gap: 16px;
+  }
+
+  .lateral {
+    grid-column: 1;
+    border-right: none;
+    border-bottom: 1px solid var(--borda);
+    padding: 10px 12px;
+    overflow-x: auto;
+  }
+
+  .menu {
+    position: static;
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .menu a {
+    white-space: nowrap;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 8px 12px;
+  }
+
+  .menu a.ativo {
+    border-bottom-color: var(--destaque);
+  }
+
+  .conteudo {
+    grid-column: 1;
+    padding: 32px 20px 64px;
+  }
+}
+
+/* --- Título de cada área --- */
+
+.titulo-da-tela {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.subtitulo-da-tela {
+  color: var(--texto-apoio);
+  margin-bottom: 36px;
 }
 
 .cartao {
@@ -116,7 +271,7 @@ a:hover {
   font: inherit;
   font-size: 16px;
   color: var(--texto);
-  background: var(--superficie);
+  background: var(--fundo);
   border: 1px solid var(--borda);
   border-radius: var(--raio);
   padding: 12px 14px;
@@ -125,7 +280,7 @@ a:hover {
 
 .campo input::placeholder {
   color: var(--texto-apoio);
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .campo input:focus {
@@ -135,10 +290,10 @@ a:hover {
 .erro {
   margin-top: 18px;
   font-weight: 500;
-  color: var(--texto);
-  background: var(--fundo);
+  color: var(--erro);
+  background: var(--superficie-alta);
   border: 1px solid var(--borda);
-  border-left: 3px solid var(--destaque);
+  border-left: 3px solid var(--erro);
   border-radius: var(--raio);
   padding: 12px 14px;
 }
@@ -147,7 +302,7 @@ a:hover {
   font: inherit;
   font-weight: 700;
   font-size: 15px;
-  color: var(--superficie);
+  color: var(--fundo);
   background: var(--destaque);
   border: none;
   border-radius: var(--raio);
@@ -161,14 +316,14 @@ a:hover {
 }
 
 .botao:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: default;
 }
 
 /* --- Lista de contatos --- */
 
 .bloco-lista {
-  margin-top: 56px;
+  margin-top: 48px;
 }
 
 .titulo-lista {
@@ -203,16 +358,25 @@ a:hover {
   gap: 24px;
   width: 100%;
   padding: 20px 24px;
+}
+
+.linha:hover {
+  background: var(--superficie-alta);
+}
+
+/* A parte da linha que abre as anotações. É botão de verdade, mas sem cara de
+   botão: quem dá o retorno visual é o fundo da linha inteira. */
+.area-clicavel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  padding: 0;
   font: inherit;
   text-align: left;
   color: var(--texto);
   background: none;
   border: none;
   cursor: pointer;
-}
-
-.linha:hover {
-  background: var(--fundo);
 }
 
 .fim-da-linha {
@@ -222,10 +386,19 @@ a:hover {
 }
 
 .seta {
+  font: inherit;
   font-size: 14px;
   font-weight: 500;
   color: var(--destaque);
+  background: none;
+  border: none;
+  padding: 0;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.seta:hover {
+  color: var(--destaque-hover);
 }
 
 .dados {
@@ -255,28 +428,366 @@ a:hover {
   white-space: nowrap;
 }
 
-/* Etiqueta de etapa: único lugar onde as cores de etapa aparecem (design.md). */
+/* Etiqueta de etapa: único lugar onde as cores de etapa aparecem (design.md).
+   No escuro a cor vai no texto e na borda — bloco chapado brilharia demais. */
 .etiqueta {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--superficie);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  border: 1px solid;
   border-radius: var(--raio);
-  padding: 5px 12px;
+  padding: 3px 10px;
   white-space: nowrap;
 }
 
-.etapa-novo { background: var(--etapa-novo); }
-.etapa-em-contato { background: var(--etapa-em-contato); }
-.etapa-proposta { background: var(--etapa-proposta); }
-.etapa-cliente { background: var(--etapa-cliente); }
+.etapa-novo { color: var(--etapa-novo); border-color: var(--etapa-novo); }
+.etapa-em-contato { color: var(--etapa-em-contato); border-color: var(--etapa-em-contato); }
+.etapa-proposta { color: var(--etapa-proposta); border-color: var(--etapa-proposta); }
+.etapa-cliente { color: var(--etapa-cliente); border-color: var(--etapa-cliente); }
 
+/* --- Etiqueta que também troca a etapa --- */
+
+.seletor-de-etapa {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* A etiqueta continua sendo a etiqueta: mesmas cores, mesma mono. Só abre
+   espaço à direita para a seta. */
+.seletor-de-etapa select {
+  appearance: none;
+  padding-right: 26px;
+  /* Herda a cor da etapa do invólucro; a borda da .etiqueta vem junto,
+     porque `border: 1px solid` sem cor usa a cor do texto. */
+  color: inherit;
+  background: var(--superficie);
+  cursor: pointer;
+  outline: none;
+}
+
+.seletor-de-etapa select:hover {
+  background: var(--superficie-alta);
+}
+
+.seletor-de-etapa select:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 2px;
+}
+
+.seletor-de-etapa select:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* A seta é desenhada com borda, não com imagem nem emoji. currentColor faz
+   ela seguir a cor da etapa sem uma regra por etapa. */
+.seletor-de-etapa::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  pointer-events: none;
+}
+
+/* A lista aberta é superfície elevada (design.md). */
+.seletor-de-etapa option {
+  font-family: var(--mono);
+  color: var(--texto);
+  background: var(--superficie-alta);
+}
+
+.erro-curto {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--erro);
+  background: var(--superficie-alta);
+  border: 1px solid var(--borda);
+  border-left: 3px solid var(--erro);
+  border-radius: var(--raio);
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+/* --- Kanban do funil --- */
+
+.acoes-da-tela {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.acoes-da-tela .botao {
+  margin-top: 0;
+}
+
+/* As quatro colunas cabem sempre na largura da tela: elas encolhem juntas em
+   vez de empurrar o quadro para o lado. Nenhuma rolagem horizontal. */
+.quadro-funil {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* Estreitou demais para quatro lado a lado: quebra em duas linhas, e depois
+   numa coluna só. Continua sem rolagem horizontal. */
+@media (max-width: 900px) {
+  .quadro-funil {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .quadro-funil {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.coluna {
+  min-width: 0;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 16px;
+}
+
+/* A coluna sob o cartão que está sendo arrastado. Só a borda muda de cor:
+   sem animação, sem sombra. */
+.coluna-alvo {
+  border-color: var(--destaque);
+}
+
+.topo-da-coluna {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.contador {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--texto-apoio);
+}
+
+.coluna-vazia {
+  font-size: 14px;
+  color: var(--texto-apoio);
+  padding: 8px 2px;
+}
+
+.cartoes {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cartao-contato {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 14px;
+  cursor: grab;
+}
+
+.cartao-contato:hover {
+  border-color: var(--texto-apoio);
+}
+
+.cartao-contato:active {
+  cursor: grabbing;
+}
+
+/* O cartão que está na mão fica apagado, para a atenção ir à coluna de destino. */
+.em-movimento {
+  opacity: 0.4;
+}
+
+/* Nome comprido em coluna estreita termina em reticências, não estourando
+   a largura do cartão. */
+.nome-do-cartao {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cartao-contato .apoio {
+  font-size: 14px;
+}
+
+/* Tempo desde o cadastro: etiqueta técnica, então vai na mono (design.md). */
+.idade-do-cartao {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--texto-apoio);
+  margin-top: 4px;
+}
+
+/* --- Cadastro por cima da tela --- */
+
+.fundo-do-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  /* Escurece o que está atrás sem desfocar: o design.md proíbe efeito de vidro. */
+  background: rgba(13, 17, 23, 0.75);
+}
+
+.modal {
+  width: 100%;
+  max-width: 560px;
+  max-height: 100%;
+  overflow-y: auto;
+  background: var(--superficie-alta);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 32px;
+}
+
+.topo-do-modal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.topo-do-modal h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Dentro do modal a superfície já é a elevada, então os campos usam a
+   superfície comum para continuarem se distinguindo do fundo. */
+.modal .campo input {
+  background: var(--superficie);
+}
+
+/* Um campo por linha: os três lado a lado não cabem na largura do modal, e o
+   @media da tela cheia não enxerga isso — ele mede a janela, não o modal. */
+.modal .campos {
+  grid-template-columns: 1fr;
+}
+
+/* --- Busca de contatos --- */
+
+.bloco-de-busca {
+  margin-bottom: 12px;
+}
+
+.campo-de-busca {
+  margin-bottom: 24px;
+  max-width: 420px;
+}
+
+.linha-do-contato {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 24px;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.linha-do-contato:hover {
+  color: var(--texto);
+  background: var(--superficie-alta);
+}
+
+.dados-do-achado {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* --- Página de um contato --- */
+
+.voltar {
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.topo-do-contato {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 28px 32px;
+}
+
+.dados-do-contato {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  color: var(--texto-apoio);
+}
+
+.topo-do-contato .titulo-da-tela {
+  margin-bottom: 8px;
+}
+
+.etapa-do-contato {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.idade-do-contato {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--texto-apoio);
+}
+
+.secao-do-contato {
+  margin-top: 48px;
+}
+
+.apoio-da-secao {
+  color: var(--texto-apoio);
+  max-width: 60ch;
+  margin-top: -8px;
+  margin-bottom: 20px;
+}
 
 /* --- Anotações de um contato --- */
 
 .anotacoes {
-  padding: 4px 24px 28px;
-  border-top: 1px solid var(--borda);
-  padding-top: 24px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 28px 32px;
 }
 
 .anotacoes textarea {
@@ -284,7 +795,7 @@ a:hover {
   font: inherit;
   font-size: 16px;
   color: var(--texto);
-  background: var(--superficie);
+  background: var(--fundo);
   border: 1px solid var(--borda);
   border-radius: var(--raio);
   padding: 12px 14px;
@@ -294,7 +805,7 @@ a:hover {
 
 .anotacoes textarea::placeholder {
   color: var(--texto-apoio);
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .anotacoes textarea:focus {
@@ -324,12 +835,15 @@ a:hover {
   border-top: none;
 }
 
+/* Data é etiqueta técnica: vai na mono (design.md). */
 .data {
   display: block;
-  font-size: 13px;
+  font-family: var(--mono);
+  font-size: 12px;
   font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--texto-apoio);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .texto-anotacao {
@@ -362,13 +876,13 @@ a:hover {
 }
 
 .link-acao:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: default;
   text-decoration: none;
 }
 
-/* "Excluir" não ganha cor própria: design.md permite uma cor de destaque só.
-   O peso do aviso vem do texto de confirmação, não de um vermelho. */
+/* Excluir não ganha cor própria: o vermelho do design.md é só de erro, e a cor
+   de destaque é uma só. O peso do aviso vem do texto de confirmação. */
 .link-acao.perigo {
   color: var(--texto-apoio);
 }
@@ -387,7 +901,7 @@ a:hover {
   margin-top: 0;
 }
 
-/* --- Tela de login --- */
+/* --- Telas de fora do sistema: login e cadastro --- */
 
 .tela-de-login {
   display: flex;
@@ -404,6 +918,8 @@ a:hover {
 }
 
 .caixa-de-login .marca {
+  display: block;
+  font-size: 26px;
   margin-bottom: 6px;
 }
 
@@ -420,57 +936,20 @@ a:hover {
   width: 100%;
 }
 
-/* --- Barra de navegação --- */
-
-.cabecalho .lado-esquerdo,
-.cabecalho .lado-direito {
-  display: flex;
-  align-items: center;
-  gap: 28px;
+.rodape-do-cartao {
+  margin-top: 24px;
+  font-size: 15px;
+  color: var(--texto-apoio);
 }
 
-.menu {
-  display: flex;
-  gap: 24px;
-}
-
-.menu a {
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.menu a:hover {
-  text-decoration: underline;
-}
-
-.quem-sou {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.selo-admin {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--superficie);
-  background: var(--texto-apoio);
+.aviso-bom {
+  margin-top: 8px;
+  color: var(--texto);
+  background: var(--superficie-alta);
+  border: 1px solid var(--borda);
+  border-left: 3px solid var(--destaque);
   border-radius: var(--raio);
-  padding: 3px 9px;
-}
-
-@media (max-width: 720px) {
-  .cabecalho {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .cabecalho .lado-esquerdo {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
+  padding: 14px 16px;
 }
 
 /* --- Área de usuários --- */
@@ -493,24 +972,6 @@ a:hover {
   font-size: 14px;
 }
 
-/* --- Rodapé dos cartões de login e cadastro --- */
-
-.rodape-do-cartao {
-  margin-top: 24px;
-  font-size: 15px;
-  color: var(--texto-apoio);
-}
-
-.aviso-bom {
-  margin-top: 8px;
-  color: var(--texto);
-  background: var(--fundo);
-  border: 1px solid var(--borda);
-  border-left: 3px solid var(--destaque);
-  border-radius: var(--raio);
-  padding: 14px 16px;
-}
-
 /* --- Follow-up escrito pela IA --- */
 
 .follow-up {
@@ -525,54 +986,119 @@ a:hover {
 
 .mensagem-gerada {
   margin-top: 20px;
-  background: var(--fundo);
+  background: var(--superficie-alta);
   border: 1px solid var(--borda);
   border-left: 3px solid var(--destaque);
   border-radius: var(--raio);
   padding: 18px 20px;
 }
 
-/* --- Painel do funil --- */
+/* --- Painel do funil (Dashboard) --- */
 
+/* Os quadros se acomodam sozinhos na largura que houver: cinco lado a lado
+   numa tela larga, menos por linha numa estreita. Sem ponto de quebra fixo. */
 .painel {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 16px;
-  margin-bottom: 40px;
-}
-
-@media (max-width: 860px) {
-  .painel {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 .quadro {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
   background: var(--superficie);
   border: 1px solid var(--borda);
   border-radius: var(--raio);
   padding: 24px;
 }
 
-/* O total ganha destaque pela borda, não por cor: o design.md reserva a cor
-   de destaque para ações, e as cores de etapa só para as etiquetas. */
+/* O total ganha destaque pela borda, não por cor de etapa. */
 .quadro-total {
-  border-color: var(--texto);
+  border-color: var(--destaque);
 }
 
+/* Número: JetBrains Mono, o toque tech do design.md. */
 .numero {
-  font-size: 44px;
-  font-weight: 800;
+  font-family: var(--mono);
+  font-size: 40px;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;
 }
 
 .rotulo {
-  font-size: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
   font-weight: 500;
+  letter-spacing: 0.03em;
   color: var(--texto-apoio);
+  white-space: nowrap;
+}
+
+/* --- As duas caixas de baixo do Dashboard --- */
+
+.painel-de-baixo {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+@media (max-width: 1000px) {
+  .painel-de-baixo {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bloco-do-painel {
+  min-width: 0;
+}
+
+/* --- Gráfico do funil --- */
+
+/* Três colunas para o gráfico todo: rótulo, barra, número. A do rótulo tem a
+   largura do maior nome de etapa — nada de medida fixa, que estouraria em tela
+   estreita. `display: contents` faz cada linha entregar os seus três itens
+   direto a esta grade, mantendo tudo alinhado entre as linhas. */
+.grafico {
+  list-style: none;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 24px;
+}
+
+.linha-do-grafico {
+  display: contents;
+}
+
+/* O trilho é o "cheio" da etapa maior; a barra ocupa a fração dela. */
+.trilho {
+  height: 10px;
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  overflow: hidden;
+}
+
+/* A cor vem da classe da etapa, que define `color` — a mesma que pinta a
+   etiqueta ao lado. Barra chapada, sem gradiente e sem animação (design.md). */
+.barra {
+  display: block;
+  height: 100%;
+  background: currentColor;
+  border-radius: var(--raio);
+}
+
+.valor-do-grafico {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
 }

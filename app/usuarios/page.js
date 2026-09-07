@@ -1,6 +1,6 @@
 import { supabase } from "../../lib/supabase";
 import { exigirUsuario } from "../../lib/autenticacao";
-import Navbar from "../navbar";
+import Shell from "../shell";
 import Lista from "./lista";
 
 export const dynamic = "force-dynamic";
@@ -10,15 +10,15 @@ export default async function PaginaDeUsuarios() {
 
   if (eu.papel !== "admin") {
     return (
-      <>
-        <Navbar usuario={eu} />
-        <main className="conteudo">
-          <section className="cartao">
-            <h2>Área restrita</h2>
-            <p>Somente o administrador pode ver e aprovar os cadastros.</p>
-          </section>
-        </main>
-      </>
+      <Shell usuario={eu}>
+        <h1 className="titulo-da-tela">Usuários</h1>
+        <p className="subtitulo-da-tela">Área restrita.</p>
+
+        <section className="cartao">
+          <h2>Área restrita</h2>
+          <p>Somente o administrador pode ver e aprovar os cadastros.</p>
+        </section>
+      </Shell>
     );
   }
 
@@ -30,11 +30,14 @@ export default async function PaginaDeUsuarios() {
     .order("criado_em", { ascending: false });
 
   return (
-    <>
-      <Navbar usuario={eu} />
-      <main className="conteudo">
-        <Lista usuarios={usuarios || []} meuId={eu.id} />
-      </main>
-    </>
+    <Shell usuario={eu}>
+      <h1 className="titulo-da-tela">Usuários</h1>
+      <p className="subtitulo-da-tela">
+        Quem pede acesso entra aqui como pendente e só usa o CRM depois de
+        aprovado.
+      </p>
+
+      <Lista usuarios={usuarios || []} meuId={eu.id} />
+    </Shell>
   );
 }

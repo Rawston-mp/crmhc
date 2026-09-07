@@ -1,10 +1,12 @@
 "use server";
 
 import Anthropic from "@anthropic-ai/sdk";
+import { revalidatePath } from "next/cache";
 
 import { supabase } from "../lib/supabase";
 import { usuarioAtual } from "../lib/autenticacao";
 import { escreverFollowUp } from "../lib/ia";
+import { ETAPAS } from "../lib/etapas";
 
 // Ações de servidor: rodam SÓ no servidor, mesmo sendo chamadas pela tela.
 // É assim que a chave secreta do banco nunca chega ao navegador.
@@ -102,6 +104,40 @@ export async function criarContato({ nome, email, telefone }) {
     console.error("Falha ao salvar contato:", error);
     return { ok: false, erro: "Não foi possível salvar. Tente de novo." };
   }
+
+  return { ok: true, contato: data };
+}
+
+// A lista de etapas vale como lista fechada: qualquer outro valor é recusado
+// antes de chegar ao banco.
+export async function mudarEtapa({ id, etapa }) {
+  const barrado = await semSessao();
+  if (barrado) return barrado;
+
+  if (!FORMATO_DE_ID.test(id || "")) {
+    return { ok: false, erro: "Contato não encontrado." };
+  }
+
+  if (!ETAPAS.includes(etapa)) {
+    return { ok: false, erro: "Etapa inválida." };
+  }
+
+  const { data, error } = await supabase
+    .from("contatos")
+    .update({ etapa })
+    .eq("id", id)
+    .select("id, etapa")
+    .single();
+
+  if (error) {
+    console.error("Falha ao mudar a etapa:", error);
+    return { ok: false, erro: "Não foi possível mudar a etapa. Tente de novo." };
+  }
+
+  // O Dashboard conta as etapas no servidor: sem isto, os números ficariam
+  // parados até a página ser recarregada na mão.
+  revalidatePath("/");
+  revalidatePath("/funil");
 
   return { ok: true, contato: data };
 }
@@ -221,6 +257,28 @@ export async function excluirAnotacao(id) {
 
 // --- Follow-up escrito por IA ---
 
+export async function listarFollowUps(contatoId) {
+  const barrado = await semSessao();
+  if (barrado) return barrado;
+
+  if (!FORMATO_DE_ID.test(contatoId || "")) {
+    return { ok: false, erro: "Não foi possível carregar os follow-ups." };
+  }
+
+  const { data, error } = await supabase
+    .from("follow_ups")
+    .select("id, texto, criado_em")
+    .eq("contato_id", contatoId)
+    .order("criado_em", { ascending: false });
+
+  if (error) {
+    console.error("Falha ao carregar os follow-ups:", error);
+    return { ok: false, erro: "Não foi possível carregar os follow-ups." };
+  }
+
+  return { ok: true, followUps: data };
+}
+
 // Roda no servidor de propósito: a chave da Anthropic fica aqui e nunca é
 // enviada ao navegador, onde qualquer visitante poderia lê-la e gastá-la.
 export async function gerarFollowUp(contatoId) {
@@ -274,7 +332,20 @@ export async function gerarFollowUp(contatoId) {
       return { ok: false, erro: "A IA não conseguiu escrever desta vez. Tente de novo." };
     }
 
-    return { ok: true, mensagem };
+    // A mensagem é guardada: o valor dela está em poder reler o que já foi
+    // escrito para este contato, não só copiar e esquecer.
+    const { data, error } = await supabase
+      .from("follow_ups")
+      .insert({ contato_id: contatoId, texto: mensagem })
+      .select("id, texto, criado_em")
+      .single();
+
+    if (error) {
+      console.error("Falha ao guardar o follow-up:", error);
+      return { ok: false, erro: "A mensagem foi escrita, mas não deu para guardar. Tente de novo." };
+    }
+
+    return { ok: true, followUp: data };
   } catch (falha) {
     // O detalhe técnico fica no terminal do servidor, para quem cuida do
     // sistema. Na tela vai só o que ajuda quem está usando.

@@ -33,7 +33,7 @@ Dois itens não estavam no plano original e entraram no caminho — estão marca
 - [x] **De página única para sistema com áreas** *(fora do plano original)* — o CRM deixou de ser uma página com uma barra em cima. Agora tem navegação lateral fixa com quatro áreas — **Dashboard**, **Funil**, **Contatos** e **Usuários** (esta só para admin) —, cada uma com o seu próprio endereço, e a identidade visual escura da v2. Nenhuma funcionalidade entrou ou saiu nessa mudança: ver `design.md`.
 - [x] **Publicação na internet** — o sistema está no ar em **crm.rawston.tech**, acessível por endereço, não só na máquina local.
 
-  > **Atenção:** o que está publicado hoje é a versão **anterior** à identidade v2. A v2 (tema escuro, navegação lateral, troca de etapa no Funil) roda só na máquina local — a decisão de segurar a publicação dela foi tomada de propósito.
+  > A **v2 está publicada**: identidade escura, navegação lateral, Kanban, página do contato e Dashboard novo estão no ar. A tabela `follow_ups` foi criada no Supabase de produção junto com ela.
 
 ---
 

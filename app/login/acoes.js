@@ -8,10 +8,22 @@ import { usuarioAtual } from "../../lib/autenticacao";
 
 const MENSAGEM_DE_ERRO = "Usuário ou senha inválidos.";
 
+// Os mesmos limites do cadastro. Não são só capricho: o senhaConfere embaralha
+// a senha com scrypt, que é lento de propósito, e o custo cresce com o tamanho
+// do que foi digitado. Sem um teto, qualquer um poderia mandar uma "senha" de
+// megabytes pela tela de login — que é pública — e ocupar o servidor de graça.
+const LIMITE = { usuario: 40, senha: 200 };
+
 export async function entrar({ usuario, senha }) {
   const nome = (usuario || "").trim();
 
   if (!nome || !senha) {
+    return { ok: false, erro: MENSAGEM_DE_ERRO };
+  }
+
+  // Passou do limite: nem chega a consultar o banco nem a embaralhar. A
+  // mensagem é a mesma das outras falhas, para não contar nada a quem tenta.
+  if (nome.length > LIMITE.usuario || String(senha).length > LIMITE.senha) {
     return { ok: false, erro: MENSAGEM_DE_ERRO };
   }
 

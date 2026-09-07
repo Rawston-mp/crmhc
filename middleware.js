@@ -22,5 +22,11 @@ export const config = {
   runtime: "nodejs",
   // Tudo é protegido, menos as telas públicas (login e cadastro) e os arquivos
   // internos que o Next serve para a página aparecer (scripts, estilos, ícone).
-  matcher: ["/((?!login|register|_next/static|_next/image|favicon.ico).*)"],
+  //
+  // O "$" e a barra depois de login e register são o que faz a exceção valer
+  // para essas duas telas e nada mais: sem eles, "login" era só um começo de
+  // texto, e um endereço como /loginqualquercoisa passava sem o porteiro.
+  matcher: [
+    "/((?!login$|login/|register$|register/|_next/static|_next/image|favicon.ico).*)",
+  ],
 };
